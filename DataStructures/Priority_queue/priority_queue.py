@@ -26,11 +26,10 @@ def default_compare_lower_value(father_node, child_node):
         return False
     
 def priority(my_heap, parent, child):
-    cmp_function = my_heap["cmp_function"]
-    if cmp_function(parent, child):
-        return True
-    else:
+    if parent is None or child is None: 
         return False
+    cmp_function = my_heap["cmp_function"]
+    return cmp_function(parent, child)
 
 def insert(my_heap, element, key):
     new_entry = ie.new_pq_entry(key, element)
@@ -43,7 +42,7 @@ def swim(my_heap, pos):
         return my_heap
     else:
         father_pos = pos // 2
-        if father_pos < 1:  
+        if father_pos < 1: 
             return my_heap
         father = al.get_element(my_heap["elements"], father_pos)
         child = al.get_element(my_heap["elements"], pos)
