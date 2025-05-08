@@ -71,17 +71,15 @@ def new_analyzer():
     """
     try:
         analyzer = {
-            'stops': None,
+            'stops': m.new_map(),
             'connections': None,
             'components': None,
-            'paths': None
+            'paths': pq.new_heap(is_min_pq=True)
         }
-
-     
-
+    
         # ___________________________________________________
         #  TODO crear la cola de prioriad y cree las funciones 
-        # necesarias para la carga de datos
+        # necesarias para la carga de datos HECHO
         # ___________________________________________________
 
         return analyzer
@@ -94,8 +92,27 @@ def new_analyzer():
 # ___________________________________________________
 
 
-def load_services(file):
-     
+def load_services(file,analyzer):
+
+
+    try:
+        start_time = get_time()  
+
+        with open(file, encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile)
+
+            for linea in reader:
+                origen = linea['origin']
+                destino = linea['destination']
+                duracion = float(linea['duration'])
+
+                pq.insert(analyzer['paths'], (origen, destino), duracion)
+
+        end_time = get_time()  
+        print(f"Tiempo de carga: {delta_time(end_time, start_time)} ms")
+
+    except Exception as exp:
+        print(f"Error cargando los datos: {exp}")
 
 
 
